@@ -31,6 +31,51 @@
 #participants-container ul li {
   margin-bottom: 5px;
 }
+/* Participants list styling inside activity cards */
+.participants ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.participants li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: 4px;
+}
+
+.delete-participant {
+  background: transparent;
+  border: none;
+  color: #c62828;
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.12s ease, color 0.12s ease;
+}
+
+.delete-participant svg {
+  width: 14px;
+  height: 14px;
+}
+
+.delete-participant:hover {
+  background-color: rgba(198, 40, 40, 0.08);
+}
+
+.delete-participant:active {
+  background-color: rgba(198, 40, 40, 0.14);
+}
+
+.delete-participant:focus {
+  outline: 2px solid rgba(26, 35, 126, 0.12);
+}
 * {
   box-sizing: border-box;
   margin: 0;

@@ -40,7 +40,52 @@ document.addEventListener("DOMContentLoaded", () => {
           const ul = document.createElement('ul');
           details.participants.forEach((p) => {
             const li = document.createElement('li');
-            li.textContent = p;
+
+            const nameSpan = document.createElement('span');
+            nameSpan.textContent = p;
+
+            const delBtn = document.createElement('button');
+            delBtn.className = 'delete-participant';
+            delBtn.title = 'Unregister participant';
+            // Use an inline SVG for a crisp small icon
+            delBtn.innerHTML = `
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M6 6L18 18M6 18L18 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            `;
+
+            delBtn.addEventListener('click', async () => {
+              try {
+                const res = await fetch(
+                  `/activities/${encodeURIComponent(name)}/unregister?email=${encodeURIComponent(p)}`,
+                  { method: 'POST' }
+                );
+                const resJson = await res.json();
+                if (res.ok) {
+                  messageDiv.textContent = resJson.message;
+                  messageDiv.className = 'success';
+                  messageDiv.classList.remove('hidden');
+                  // Refresh activities so participants and availability update
+                  fetchActivities();
+                } else {
+                  messageDiv.textContent = resJson.detail || 'An error occurred';
+                  messageDiv.className = 'error';
+                  messageDiv.classList.remove('hidden');
+                }
+                // Hide message after 5 seconds
+                setTimeout(() => {
+                  messageDiv.classList.add('hidden');
+                }, 5000);
+              } catch (error) {
+                messageDiv.textContent = 'Failed to unregister. Please try again.';
+                messageDiv.className = 'error';
+                messageDiv.classList.remove('hidden');
+                console.error('Error unregistering:', error);
+              }
+            });
+
+            li.appendChild(nameSpan);
+            li.appendChild(delBtn);
             ul.appendChild(li);
           });
           participantsDiv.appendChild(ul);
